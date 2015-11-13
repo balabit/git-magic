@@ -1,3 +1,3 @@
-from .changefinder import find_changes
-__all__=['find_changes']
+from .change import find_changes, Change
+__all__=['find_changes', 'Change']
 
