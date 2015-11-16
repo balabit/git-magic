@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+import gitmagic
+from git import Repo
+
+repo = Repo('.')
+initial_commit = "f445741336ae7e4e6de585ffdc3807e120339b46"
+common_ancestor = repo.merge_base(initial_commit, 'HEAD')
+commit_range = []
+
+for commit in repo.iter_commits(None):
+    if commit == common_ancestor:
+        break
+    commit_range.append(commit)
+
+destination_picker = gitmagic.FixupDestinationPicker(repo, commit_range)
+gitmagic.fixup(repo, destination_picker)
+
