@@ -9,10 +9,9 @@ class FixupDestinationPicker(object):
             return None
         return commit
 
-
     def _pick_commit_for_change(self, change):
         try:
-            return next(self._repo.iter_commits(paths=change.file_name))
+            return next(self._repo.iter_commits(paths=change.a_file_name))
         except StopIteration:
             return None
 

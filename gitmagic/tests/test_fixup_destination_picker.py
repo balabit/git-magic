@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 import gitmagic
 
+
 class TestFixupDestinationPicker(unittest.TestCase):
     def setUp(self):
         self.changed_file_path = "a_file_path"
@@ -21,5 +22,4 @@ class TestFixupDestinationPicker(unittest.TestCase):
 
     def _pick_commit_from(self, commits):
         self.repo.iter_commits.return_value = iter(commits)
-        return self.destination_picker.pick(gitmagic.Change(self.changed_file_path))
-
+        return self.destination_picker.pick(gitmagic.Change(self.changed_file_path, None, None, None, None, None, None))
