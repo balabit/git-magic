@@ -1,3 +1,0 @@
-class DestinationPicker(object):
-    pass
-
