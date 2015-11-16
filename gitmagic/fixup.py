@@ -1,2 +1,3 @@
 def fixup(repo):
-    pass
+    repo.reset()
+
