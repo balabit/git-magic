@@ -17,6 +17,6 @@ class TestFixupDestinationPicker(unittest.TestCase):
         self.assertIsNone( self._pick_commit_from("matching commit not in the range") )
 
     def _pick_commit_from(self, commit):
-        self.repo.commit.iter_items.return_value = iter([commit])
+        self.repo.iter_commits.return_value = iter([commit])
         return self.destination_picker.pick(gitmagic.Change(self.changed_file_path))
 
