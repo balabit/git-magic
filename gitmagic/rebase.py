@@ -20,3 +20,23 @@ def do_rebase(repo, base_branch, branch_to_rebase=None):
         commits_to_pick.append(cherry)
     for pick in reversed(commits_to_pick):
         git.execute(['git', 'cherry-pick', pick.hexsha])
+
+
+def do_fixup(repo, fixup_into, commit_to_fixup):
+    git = Git(repo.working_dir)
+
+    commits_to_pick = []
+    if commit_to_fixup != repo.head.commit:
+        commits_to_pick.append(repo.head.commit)
+    for cherry in repo.head.commit.traverse():
+        if cherry == fixup_into:
+            break
+        if cherry == commit_to_fixup:
+            continue
+        commits_to_pick.append(cherry)
+    git.execute(['git', 'reset', '--hard', fixup_into.hexsha])
+    git.execute(['git', 'cherry-pick', commit_to_fixup.hexsha])
+    git.execute(['git', 'reset', '--soft', 'HEAD~1'])
+    git.execute(['git', 'commit', '--amend', '--no-edit'])
+    for pick in reversed(commits_to_pick):
+        git.execute(['git', 'cherry-pick', pick.hexsha])
