@@ -7,6 +7,10 @@ import gitmagic
 
 
 class TestChangeFinder(unittest.TestCase):
+    B_FILE_CONTENT = mock.Mock(
+        read=mock.Mock(return_value='line1\nlineb\nline3')
+    )
+
     def setUp(self):
         self._repo = mock.Mock(spec=git.repo.Repo)
         self._diff_list = []
@@ -18,15 +22,14 @@ class TestChangeFinder(unittest.TestCase):
             a_blob=mock.Mock(
                 data_stream=mock.Mock(
                     read=mock.Mock(return_value=b'line1\nlinea\nline3'))),
-            b_blob=mock.Mock(
-                data_stream=mock.Mock(
-                    read=mock.Mock(return_value=b'line1\nlineb\nline3')))
         )
 
+    @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
     def test_that_it_returns_the_list_of_changes(self):
         changes = gitmagic.find_changes(self._repo)
         self.assertEquals(list(changes), [])
 
+    @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
     def test_that_it_returns_change_objects_for_each_diff(self):
         self._diff_list.append(self._diff_mock)
         changes = list(gitmagic.find_changes(self._repo))
@@ -35,6 +38,7 @@ class TestChangeFinder(unittest.TestCase):
         self.assertEquals(changes[0].a_file_name, "changed_file_name")
         self.assertEquals(changes[0].b_file_name, "changed_file_name")
 
+    @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
     def test_changes_created_lazily(self):
         self._diff_list.append(self._diff_mock)
         self._diff_list_on_second_call.append(self._diff_mock)
