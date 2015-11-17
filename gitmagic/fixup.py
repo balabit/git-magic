@@ -10,5 +10,5 @@ def fixup(repo, destination_picker, change_finder):
 
 def _apply_change(repo, change):
     #todo: apply unified diff only
-    repo.index.add([change.file_name])
+    repo.index.add([change.a_file_name])
 

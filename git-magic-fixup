@@ -4,7 +4,7 @@ from git import Repo
 
 def simple_change_finder(repo):
     for diff in repo.head.commit.diff(None):
-        yield Change(diff.a_path, diff.b_path, "", "", (), (), "")
+        yield gitmagic.Change(diff.a_path, diff.b_path, "", "", (), (), "")
 
 repo = Repo('.')
 c_range = gitmagic.commit_range(repo)
