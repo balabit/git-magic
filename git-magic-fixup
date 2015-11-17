@@ -5,11 +5,6 @@ from git import Repo
 from git.cmd import Git
 import argparse
 
-
-def simple_change_finder(repo):
-    for diff in repo.head.commit.diff(None):
-        yield gitmagic.Change(diff.a_path, diff.b_path, "", "", (), (), "")
-
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--interactive", help="confirm every step of the magic...", action="store_true")
 args = parser.parse_args()
@@ -17,7 +12,7 @@ args = parser.parse_args()
 repo = Repo('.')
 c_range = gitmagic.commit_range(repo)
 destination_picker = gitmagic.FixupDestinationPicker(repo, c_range)
-gitmagic.fixup(repo, destination_picker, simple_change_finder, vars( args ))
+gitmagic.fixup(repo, destination_picker, gitmagic.find_changes, vars( args ))
 git = Git(repo.working_dir)
 gitmagic.checkpoint("Should I run rebase autosquash?", vars( args ))
 git.execute(['git', '-c', 'core.editor=/bin/true', 'rebase', '--autosquash', '-i', 'master' ])
