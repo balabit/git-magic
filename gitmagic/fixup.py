@@ -1,4 +1,6 @@
 import gitmagic
+from git.cmd import Git
+from io import import StringIO
 
 def fixup(repo, destination_picker, change_finder, args={}):
     repo.index.reset()
@@ -18,6 +20,6 @@ def fixup(repo, destination_picker, change_finder, args={}):
         repo.index.commit( message = "fixup! {}".format(destination.message))
 
 def _apply_change(repo, change):
-    #todo: apply unified diff only
-    repo.index.add([change.a_file_name])
+    git = Git(repo.working_dir)
+    git.execute(['git', 'apply', '-'], istream=StringIO(change.unified_diff()))
 
