@@ -5,5 +5,5 @@ from git import Repo
 repo = Repo('.')
 c_range = gitmagic.commit_range(repo)
 destination_picker = gitmagic.FixupDestinationPicker(repo, c_range)
-gitmagic.fixup(repo, destination_picker)
+gitmagic.fixup(repo, destination_picker, gitmagic.find_changes)
 
