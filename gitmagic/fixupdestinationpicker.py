@@ -28,7 +28,11 @@ def blame(repo, filename, hunk):
     commit_start = 0
     for commit, lines in repo.blame(None, filename):
         commit_end = commit_start + len( lines )
-        commits.append(commit)
+        if overlaps(start, end, commit_start, commit_end):
+            commits.insert(0, commit)
+        else:
+            commits.append(commit)
+        commit_start = commit_end + 1
 
     return commits
 
