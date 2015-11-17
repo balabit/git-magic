@@ -11,7 +11,7 @@ class TestFixup(unittest.TestCase):
         self.right = 'right reference'
         self.history = ['initial commit', 'common ancestor', 'commit 1', 'commit 2', self.right]
         self.repo = mock.Mock()
-        self.repo.merge_base.return_value = 'common ancestor'
+        self.repo.merge_base.return_value = ['common ancestor']
         self.repo.iter_commits.return_value = reverse(self.history)
         self.c_range = commit_range(self.repo, self.left, self.right)
 
