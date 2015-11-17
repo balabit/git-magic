@@ -3,26 +3,33 @@ from unittest import mock
 from gitmagic import fixup
 from gitmagic import find_changes
 from gitmagic import Change
+from io import StringIO
 
 class CommonFixupTest(unittest.TestCase):
-    def common_setup(self):
+    def setUp(self):
         self.repo = mock.Mock()
         self.destination_commit = mock.Mock()
         self.destination_commit.message = "a commit message"
         self.destination_commit.hexsha = "commit sha"
         self.destination_commit.summary = "commit sum"
         self.first_change = mock.Mock()
+        self.first_change.unified_diff.return_value = StringIO("the diff")
         self.find_changes = mock.Mock()
         self.find_changes.return_value = iter([self.first_change])
-
+        self.destination_picker = mock.Mock()
+        self.do_set_up()
+        with mock.patch( "git.cmd.Git" ) as GitMock:
+            instance_mock = mock.Mock()
+            instance_mock.execute.return_value = None
+            GitMock.return_value = instance_mock
+            fixup(self.repo, self.destination_picker, self.find_changes)
+            GitMock.assert_called_with(self.repo.working_dir)
+            instance_mock.execute.assert_called()
 
 
 class TestFixupWithoutDestinationCommit(CommonFixupTest):
-    def setUp(self):
-        self.common_setup()
-        self.destination_picker = mock.Mock()
+    def do_set_up(self):
         self.destination_picker.pick.return_value = []
-        fixup(self.repo, self.destination_picker, self.find_changes)
 
     def test_that_it_creates_a_new_commit_for_changes_without_a_destination(self):
         self.repo.index.commit.assert_called_with( message="WARNING: no destination commit" )
@@ -30,11 +37,8 @@ class TestFixupWithoutDestinationCommit(CommonFixupTest):
 
 class TestFixup(CommonFixupTest):
 
-    def setUp(self):
-        self.common_setup()
-        self.destination_picker = mock.Mock()
+    def do_set_up(self):
         self.destination_picker.pick.return_value = [self.destination_commit]
-        fixup(self.repo, self.destination_picker, self.find_changes);
 
     def test_that_it_resets_the_index(self):
         self.repo.index.reset.assert_called_with()
