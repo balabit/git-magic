@@ -27,8 +27,10 @@ class TestFixupDestinationPicker(unittest.TestCase):
     def setUp(self):
         self.changed_file_path = "a_file_path"
         self.matching_commit = self.changed_file_path
+        self.another_changed_file_path = "another_file_path"
+        self.another_matching_commit = self.another_changed_file_path
         self.repo = mock.Mock()
-        self.commit_range = [self.matching_commit, "something else"]
+        self.commit_range = [self.matching_commit, self.another_matching_commit]
         self.destination_picker = gitmagic.FixupDestinationPicker(self.repo, self.commit_range)
 
     def test_that_it_picks_a_commit_on_the_changed_file(self):
@@ -39,7 +41,7 @@ class TestFixupDestinationPicker(unittest.TestCase):
 
     def _pick_commit_from(self, commits):
         with mock.patch('gitmagic.blame') as blame_mock:
-            blame_mock.return_value = commits[0]
+            blame_mock.return_value = commits
             return self.destination_picker.pick(
                     gitmagic.Change(
                         self.changed_file_path, "b name",

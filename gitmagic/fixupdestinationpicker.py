@@ -6,14 +6,17 @@ class FixupDestinationPicker(object):
         self._commit_range = commit_range
 
     def pick(self, change):
-        commit = self._pick_commit_for_change(change)
-        if commit not in self._commit_range:
-            return []
-        return [commit]
+        commits = self._pick_commit_for_change(change)
+        for commit in commits:
+            if commit not in self._commit_range:
+                continue
+            return [commit]
+
+        return []
 
     def _pick_commit_for_change(self, change):
         try:
-            return gitmagic.blame(self._repo, change.a_file_name, change.a_hunk[0])
+            return gitmagic.blame(self._repo, change.a_file_name, change.a_hunk)
         except StopIteration:
             return None
 
