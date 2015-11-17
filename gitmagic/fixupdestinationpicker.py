@@ -6,8 +6,8 @@ class FixupDestinationPicker(object):
     def pick(self, change):
         commit = self._pick_commit_for_change(change)
         if commit not in self._commit_range:
-            return None
-        return commit
+            return []
+        return [commit]
 
     def _pick_commit_for_change(self, change):
         try:

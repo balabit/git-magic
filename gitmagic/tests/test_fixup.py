@@ -4,20 +4,33 @@ from gitmagic import fixup
 from gitmagic import find_changes
 from gitmagic import Change
 
-class TestFixup(unittest.TestCase):
-
-    def setUp(self):
+class CommonFixupTest(unittest.TestCase):
+    def common_setup(self):
         self.repo = mock.Mock()
         self.destination_commit = mock.Mock()
         self.destination_commit.message = "a commit message"
         self.destination_commit.hexsha = "commit sha"
         self.destination_commit.summary = "commit sum"
-        self.destination_picker = mock.Mock()
-        self.destination_picker.pick.return_value = self.destination_commit
-
         self.first_change = mock.Mock()
         self.find_changes = mock.Mock()
         self.find_changes.return_value = iter([self.first_change])
+
+
+
+class TestFixupWithoutDestinationCommit(CommonFixupTest):
+    def setUp(self):
+        self.common_setup()
+        self.destination_picker = mock.Mock()
+        self.destination_picker.pick.return_value = []
+        fixup(self.repo, self.destination_picker, self.find_changes);
+
+
+class TestFixup(CommonFixupTest):
+
+    def setUp(self):
+        self.common_setup()
+        self.destination_picker = mock.Mock()
+        self.destination_picker.pick.return_value = [self.destination_commit]
         fixup(self.repo, self.destination_picker, self.find_changes);
 
     def test_that_it_resets_the_index(self):

@@ -5,7 +5,7 @@ def fixup(repo, destination_picker, change_finder, args={}):
     repo.index.reset()
     for change in change_finder(repo):
         _apply_change(repo, change)
-        destination_commit = destination_picker.pick(change)
+        destination_commit = destination_picker.pick(change)[0]
         gitmagic.checkpoint("Should I create fixup commit for {} -> {}:{}\n{}".format(
             change.a_file_name,
             destination_commit.hexsha[:7],
