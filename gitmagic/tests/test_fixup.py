@@ -22,7 +22,10 @@ class TestFixupWithoutDestinationCommit(CommonFixupTest):
         self.common_setup()
         self.destination_picker = mock.Mock()
         self.destination_picker.pick.return_value = []
-        fixup(self.repo, self.destination_picker, self.find_changes);
+        fixup(self.repo, self.destination_picker, self.find_changes)
+
+    def test_that_it_creates_a_new_commit_for_changes_without_a_destination(self):
+        self.repo.index.commit.assert_called_with( message="WARNING: no destination commit" )
 
 
 class TestFixup(CommonFixupTest):
