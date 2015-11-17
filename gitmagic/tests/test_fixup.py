@@ -10,6 +10,8 @@ class TestFixup(unittest.TestCase):
         self.repo = mock.Mock()
         self.destination_commit = mock.Mock()
         self.destination_commit.message = "a commit message"
+        self.destination_commit.hexsha = "commit sha"
+        self.destination_commit.summary = "commit sum"
         self.destination_picker = mock.Mock()
         self.destination_picker.pick.return_value = self.destination_commit
 
