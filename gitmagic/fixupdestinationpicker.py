@@ -18,15 +18,17 @@ class FixupDestinationPicker(object):
             return None
 
 
-def blame(repo, filename, line_number):
-    blame_list = _blame_as_list(repo, filename)
-    return blame_list[line_number - 1][1]
+def overlaps(start1, end1, start2, end2):
+    return start1 >= start2 and start1 <=end2
 
 
-def _blame_as_list(repo, filename):
-    blame_as_list = []
+def blame(repo, filename, hunk):
+    commits = []
+    (start, end) = hunk
+    commit_start = 0
     for commit, lines in repo.blame(None, filename):
-        for line in lines:
-            blame_as_list.append([line, commit])
-    return blame_as_list
+        commit_end = commit_start + len( lines )
+        commits.append(commit)
+
+    return commits
 
