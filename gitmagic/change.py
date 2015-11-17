@@ -41,8 +41,8 @@ def find_changes(repo: git.repo.Repo) -> [Change]:
             diff = repo.head.commit.diff(None)[0]
         except IndexError:
             break
-        a_file_content = diff.a_blob.data_stream.read().decode()
-        b_file_content = open(diff.b_path).read()
+        a_file_content = diff.a_blob.data_stream.read().decode().split('\n')
+        b_file_content = open(diff.b_path).read().split('\n')
         for tag, a_start, a_end, b_start, b_end in SequenceMatcher(None, a_file_content, b_file_content).get_opcodes():
             if tag == 'equal':
                 continue
