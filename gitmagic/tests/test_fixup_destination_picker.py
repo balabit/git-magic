@@ -3,6 +3,15 @@ from unittest import mock
 import gitmagic
 
 
+class TestBlameParser(unittest.TestCase):
+    def test_that_it_returns_a_commit_object_from_a_blame_and_a_line_number(self):
+        self.commit1 = ['commit1',['line 1', 'line 2', 'line 3']]
+        self.commit2 = ['commit2',['line 4', 'line 5', 'line 6']]
+        repo = mock.Mock()
+        repo.blame.return_value = [self.commit1, self.commit2]
+        commit = gitmagic.blame(repo, 'a filename', 2)
+        self.assertEquals(commit,self.commit1[0])
+
 class TestFixupDestinationPicker(unittest.TestCase):
     def setUp(self):
         self.changed_file_path = "a_file_path"

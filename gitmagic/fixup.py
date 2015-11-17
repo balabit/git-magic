@@ -1,6 +1,5 @@
 import gitmagic
 
-
 def fixup(repo, destination_picker, change_finder, args={}):
     repo.index.reset()
     for change in change_finder(repo):

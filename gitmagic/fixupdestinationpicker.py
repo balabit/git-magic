@@ -15,3 +15,16 @@ class FixupDestinationPicker(object):
         except StopIteration:
             return None
 
+
+def blame(repo, filename, line_number):
+    blame_list = _blame_as_list(repo, filename)
+    return blame_list[line_number - 1][1]
+
+
+def _blame_as_list(repo, filename):
+    blame_as_list = []
+    for commit, lines in repo.blame(None, filename):
+        for line in lines:
+            blame_as_list.append([line, commit])
+    return blame_as_list
+
