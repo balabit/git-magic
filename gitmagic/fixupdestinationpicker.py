@@ -1,3 +1,5 @@
+import gitmagic
+
 class FixupDestinationPicker(object):
     def __init__(self, repo, commit_range):
         self._repo = repo
@@ -11,7 +13,7 @@ class FixupDestinationPicker(object):
 
     def _pick_commit_for_change(self, change):
         try:
-            return next(self._repo.iter_commits(paths=change.a_file_name))
+            return gitmagic.blame(self._repo, change.a_file_name, change.a_hunk[0])
         except StopIteration:
             return None
 

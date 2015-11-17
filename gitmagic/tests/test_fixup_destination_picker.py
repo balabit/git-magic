@@ -26,9 +26,12 @@ class TestFixupDestinationPicker(unittest.TestCase):
     def test_that_it_picks_a_commit_only_from_the_commit_range(self):
         self.assertEquals(len(self._pick_commit_from(["matching commit not in the range"])), 0)
 
-    def test_that_it_does_not_crash_in_case_of_a_new_file(self):
-        self.assertEquals(len(self._pick_commit_from([])), 0)
-
     def _pick_commit_from(self, commits):
-        self.repo.iter_commits.return_value = iter(commits)
-        return self.destination_picker.pick(gitmagic.Change(self.changed_file_path, None, None, None, None, None, None))
+        with mock.patch('gitmagic.blame') as blame_mock:
+            blame_mock.return_value = commits[0]
+            return self.destination_picker.pick(
+                    gitmagic.Change(
+                        self.changed_file_path, "b name",
+                        "a content", "b content",
+                        (1, 2), (3, 4),
+                        "tag"))
