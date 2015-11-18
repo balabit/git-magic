@@ -4,7 +4,7 @@ def checkpoint(message, args):
     if not args.get("interactive", False):
         return
 
-    answer = input("{} [Y,n]".format(message))
+    answer = input("{}".format(message))
     if answer=="n":
         sys.exit(1)
 
