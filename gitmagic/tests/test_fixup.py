@@ -13,7 +13,7 @@ class CommonFixupTest(unittest.TestCase):
         self.destination_commit.hexsha = "commit sha"
         self.destination_commit.summary = "commit sum"
         self.first_change = mock.Mock()
-        self.first_change.unified_diff.return_value = StringIO("the diff")
+        self.first_change.diff = "the diff"
         self.find_changes = mock.Mock()
         self.find_changes.return_value = iter([self.first_change])
         self.destination_picker = mock.Mock()
@@ -24,8 +24,6 @@ class CommonFixupTest(unittest.TestCase):
             GitMock.return_value = instance_mock
             fixup(self.repo, self.destination_picker, self.find_changes)
             GitMock.assert_called_with(self.repo.working_dir)
-            instance_mock.execute.assert_called()
-
 
 class TestFixupWithoutDestinationCommit(CommonFixupTest):
     def do_set_up(self):

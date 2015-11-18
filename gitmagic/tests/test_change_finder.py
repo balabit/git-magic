@@ -25,7 +25,7 @@ class TestChangeFinder(unittest.TestCase):
         )
 
     @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
-    def test_that_it_returns_the_list_of_changes(self):
+    def test_that_it_returns_empty_list_if_there_are_no_changes(self):
         changes = gitmagic.find_changes(self._repo)
         self.assertEquals(list(changes), [])
 
@@ -49,45 +49,3 @@ class TestChangeFinder(unittest.TestCase):
         next(changes_generator)
         self.assertEqual(self._repo.head.commit.diff.call_count, 2)
 
-
-class TestChange(unittest.TestCase):
-    def setUp(self):
-        orig = ['line0', 'line1', 'line2', 'line3',
-                'line4', 'line5', 'line6', 'line7']
-        new = ['newline'] + orig[:-1]
-        new[4] = 'replaced_line'
-        self.replace_unified_diff = gitmagic.Change(
-            'file1', 'file2', orig, new,
-            (3, 4), (4, 5), 'replace'
-        ).diff
-
-    def test_change_unified_diff_contains_filename(self):
-        self.assertIn('--- a/file1', self.replace_unified_diff)
-        self.assertIn('+++ b/file2', self.replace_unified_diff)
-
-    def test_change_unified_diff_contains_the_replace_diff(self):
-        self.assertIn('-line3', self.replace_unified_diff)
-        self.assertIn('+replaced_line', self.replace_unified_diff)
-
-    def test_diff_contains_the_context(self):
-        self.assertIn(' line0', self.replace_unified_diff)
-        self.assertIn(' line5', self.replace_unified_diff)
-
-    def test_diff_contains_the_line_numbers(self):
-        self.assertIn(
-            '@@ -{},{} +{},{} @@'.format(
-                3, 4,
-                4, 5),
-            self.replace_unified_diff
-        )
-
-    def test_diff_has_right_length(self):
-        lines = self.replace_unified_diff.rstrip('\n').split('\n')
-        header = 2
-        diffstat = 1
-        context = 6
-        deletions = 1
-        insertions = 1
-        self.assertEqual(len(lines),
-                         header + context + diffstat +
-                         deletions + insertions)

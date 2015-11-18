@@ -47,4 +47,4 @@ class TestFixupDestinationPicker(unittest.TestCase):
                         self.changed_file_path, "b name",
                         "a content", "b content",
                         (1, 2), (3, 4),
-                        "tag"))
+                        "diff"))
