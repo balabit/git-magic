@@ -22,20 +22,21 @@ class FixupDestinationPicker(object):
 
 
 def overlaps(start1, end1, start2, end2):
-    return start1 >= start2 and start1 <=end2
+    return start1 >= start2 and start1 <= end2
 
 
 def blame(repo, filename, hunk):
     commits = []
     (start, end) = hunk
     commit_start = 0
-    for commit, lines in repo.blame(None, filename):
+    output = repo.blame(None, filename)
+    for commit, lines in output:
         commit_end = commit_start + len( lines )
         if overlaps(start, end, commit_start, commit_end):
             commits.insert(0, commit)
         else:
             commits.append(commit)
-        commit_start = commit_end + 1
+        commit_start = commit_end
 
     return commits
 
