@@ -31,11 +31,11 @@ def find_changes(repo: git.repo.Repo) -> [Change]:
             if tag == 'equal':
                 continue
 
-            unified_diff = ""
-            for line in difflib.unified_diff(a_file_content[:a_end + 3],b_file_content[:b_end + 3], fromfile=diff.a_path, tofile=diff.b_path):
-                unified_diff+=line
-                if line[-1]!="\n":
-                    unified_diff+="\n"
+            unified_diff = "".join(difflib.unified_diff(
+                a_file_content[:a_end + 3],
+                b_file_content[:b_end + 3],
+                fromfile=diff.a_path,
+                tofile=diff.b_path) )
 
             yield Change(diff.a_path, diff.b_path, a_file_content, b_file_content,
                          (a_start, a_end), (b_start, b_end), unified_diff)

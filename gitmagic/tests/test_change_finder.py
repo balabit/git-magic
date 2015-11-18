@@ -59,7 +59,7 @@ class TestChange(unittest.TestCase):
         self.replace_unified_diff = gitmagic.Change(
             'file1', 'file2', orig, new,
             (3, 4), (4, 5), 'replace'
-        ).unified_diff().read()
+        ).diff
 
     def test_change_unified_diff_contains_filename(self):
         self.assertIn('--- a/file1', self.replace_unified_diff)
