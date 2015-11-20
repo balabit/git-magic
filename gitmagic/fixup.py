@@ -1,3 +1,6 @@
+# Copyright (c) 2015 BalaBit
+# All rights reserved.
+
 import gitmagic
 import git.cmd
 import tempfile

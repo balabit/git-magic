@@ -1,3 +1,6 @@
+# Copyright (c) 2015 BalaBit
+# All rights reserved.
+
 from .change import find_changes, Change
 from .fixupdestinationpicker import FixupDestinationPicker, blame
 from .fixup import fixup

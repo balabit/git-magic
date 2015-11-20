@@ -1,3 +1,6 @@
+# Copyright (c) 2015 BalaBit
+# All rights reserved.
+
 #!/usr/bin/env python
 import sys
 import gitmagic
