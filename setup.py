@@ -8,9 +8,9 @@ setup(
         description = 'All the magical things that git misses.',
         scripts = ['git-magic-fixup'],
         install_requires = ['GitPython>=1.0.1'],
-        url = 'https://github.com/peterhajdu/gitmagic',
+        url = 'https://github.com/balabit/gitmagic',
         maintainer = 'Peter Hajdu',
         maintainer_email = 'peter.ferenc.hajdu@gmail.com',
-        download_url = 'https://github.com/peterhajdu/gitmagic/tarball/0.1',
+        download_url = 'https://github.com/balabit/gitmagic/tarball/0.1',
         keywords = ['git', 'magic', 'fixup'],
         )
