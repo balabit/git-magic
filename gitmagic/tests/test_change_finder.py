@@ -2,7 +2,6 @@ import unittest
 from unittest import mock
 
 import git
-
 import gitmagic
 
 
@@ -37,6 +36,12 @@ class TestChangeFinder(unittest.TestCase):
         self.assertIsInstance(changes[0], gitmagic.Change)
         self.assertEquals(changes[0].a_file_name, "changed_file_name")
         self.assertEquals(changes[0].b_file_name, "changed_file_name")
+
+    @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
+    def test_that_it_adds_the_magical_a_b_prefix_to_the_paths(self):
+        self._diff_list.append(self._diff_mock)
+        changes = list(gitmagic.find_changes(self._repo))
+        self.assertEquals(changes[0].diff.startswith("--- a/changed_file_name\n+++ b/changed_file_name"), True)
 
     @mock.patch('builtins.open', mock.Mock(return_value=B_FILE_CONTENT))
     def test_changes_created_lazily(self):
