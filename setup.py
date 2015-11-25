@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
         name = "gitmagic",
-        version = "0.1",
+        version = "0.3",
         packages = find_packages(),
         description = 'All the magical things that git misses.',
         scripts = ['git-magic-fixup'],
@@ -11,6 +11,6 @@ setup(
         url = 'https://github.com/balabit/git-magic',
         maintainer = 'Peter Hajdu',
         maintainer_email = 'peter.ferenc.hajdu@gmail.com',
-        download_url = 'https://github.com/balabit/git-magic/tarball/0.1',
+        download_url = 'https://github.com/balabit/git-magic/tarball/0.3',
         keywords = ['git', 'magic', 'fixup'],
         )
